@@ -5,5 +5,8 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"build": "tsc -b tsconfig.build.json"
+	},
+	"dependencies": {
+		"@libsql/client": "^0.15.15"
 	}
 }
