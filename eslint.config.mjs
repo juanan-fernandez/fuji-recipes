@@ -9,7 +9,14 @@ const compat = new FlatCompat({ baseDirectory: process.cwd() })
 export default [
 	// Ignore patterns
 	{
-		ignores: ['node_modules/', 'dist/', '.env', '.vscode/']
+		ignores: [
+			'node_modules/',
+			'dist/',
+			'packages/shared/dist',
+			'.env',
+			'.vscode/',
+			'apps/backend/drizzle.config.ts'
+		]
 	},
 	/*** Backend Node + TS*/
 	{
