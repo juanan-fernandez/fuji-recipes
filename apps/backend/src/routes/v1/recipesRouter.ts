@@ -1,9 +1,24 @@
-import express from 'express';
+import express from 'express'
+import {
+	getAllRecipes,
+	getRecipeById,
+	createRecipe,
+	updateRecipe,
+	deleteRecipe
+} from '../../controllers/recipesController'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/', (_req, res) => {
-   res.json({ message: 'Recipes endpoint' });
-});
+//list of all recipes
+router.get('/', getAllRecipes)
 
-export default router;
+//get recipe by id
+router.get('/:id', getRecipeById)
+
+router.post('/', createRecipe)
+
+router.put('/:id', updateRecipe)
+
+router.delete('/:id', deleteRecipe)
+
+export default router
