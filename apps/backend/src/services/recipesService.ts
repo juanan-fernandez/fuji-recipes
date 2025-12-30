@@ -1,4 +1,8 @@
-import { turso } from '../database/dbclient'
+import { turso } from '@db/dbclient'
+import { recipes } from '@db/schema'
+import { eq } from 'drizzle-orm'
+//import { RecipeDB, mapRowToRecipe } from '@db/mappers/recipeMapper'
+import { RecipeDB, NewRecipeDB } from '@db/types'
 import { Recipe } from '@fujirecipes/shared/dist/types/recipeTypes'
 
 type CreateRecipeBody = Omit<Recipe, 'id'>
@@ -12,129 +16,41 @@ type UpdateRecipeResult = {
 	rowsAffected?: number
 }
 
-// types/RecipeDB.ts
-export interface RecipeDB {
-	Id: number
-	RECIPE_NAME: string
-	AUTHOR: string | null
-	URL: string | null
-	CAMERA_SENSOR: string | null
-	FILM: string
-	GRAIN: string | null
-	COLOR_CHROME_EFFECT: string | null
-	COLOR_CHROME_FX_BLUE: string | null
-	WHITE_BALANCE: string | null
-	DYNAMIC_RANGE: number | null
-	HIGHLIGHT: number | null
-	SHADOW: number | null
-	COLOR: number | null
-	SHARPNESS: number | null
-	NR: number | null
-	CLARITY: number | null
-	EXP_COMPENSATION: string | null
-	ISO: string | null
-	NOTES: string | null
-	created_at: string
-	updated_at: string
-}
-
-function mapRowToRecipe(row: Partial<RecipeDB>): Recipe {
-	return {
-		id: row.Id || 0,
-		recipeName: row.RECIPE_NAME || '',
-		author: row.AUTHOR ?? 'unknown',
-		url: row.URL || '',
-		cameraSensor: row.CAMERA_SENSOR || '',
-		film: row.FILM || '',
-		grain: row.GRAIN ?? '',
-		colorChromeEffect: row.COLOR_CHROME_EFFECT ?? '',
-		colorChromeFxBlue: row.COLOR_CHROME_FX_BLUE ?? '',
-		whiteBalance: row.WHITE_BALANCE ?? '',
-		dynamicRange: row.DYNAMIC_RANGE ?? 0,
-		highlight: row.HIGHLIGHT ?? 0,
-		shadow: row.SHADOW ?? 0,
-		color: row.COLOR ?? 0,
-		sharpness: row.SHARPNESS ?? 0,
-		nr: row.NR ?? 0,
-		clarity: row.CLARITY ?? 0,
-		expCompensation: row.EXP_COMPENSATION ?? '0',
-		iso: row.ISO ?? 'auto',
-		notes: row.NOTES ?? '',
-		createdAt: row.created_at ?? '',
-		updatedAt: row.updated_at ?? ''
-	}
-}
-
-function mapRowsToRecipes(rows: RecipeDB[]): Recipe[] {
-	return rows.map(mapRowToRecipe)
-}
-
-async function getAllRecipes(): Promise<Recipe[]> {
+async function getAllRecipes(): Promise<RecipeDB[]> {
 	try {
-		const result = await turso.execute('SELECT * FROM RECIPES')
-		console.log('Fetched rows:', result.rows)
-		return mapRowsToRecipes(result.rows as unknown as RecipeDB[])
+		const result = await turso.select().from(recipes).all()
+
+		console.log('Fetched rows:', result)
+		return result
 	} catch (error) {
 		console.error('Error fetching all recipes:', error)
 		return []
 	}
 }
 
-async function getRecipeById(id: number): Promise<Recipe | null> {
+async function getRecipeById(id: number): Promise<RecipeDB | null> {
 	try {
-		const result = await turso.execute('SELECT * FROM RECIPES WHERE id = ?', [id])
+		const result = await turso.select().from(recipes).where(eq(recipes.id, id)).all()
 		if (!result) return null
-		if (result.rows.length > 0) {
-			const row = result.rows[0]
-			console.log('Row data:', row)
-			const recipe: Recipe = mapRowToRecipe(row as unknown as RecipeDB)
-			return recipe
-		}
-		return null
+		console.log('Fetched recipe by ID:', result)
+		return result[0]
 	} catch (error) {
 		console.error('Error fetching recipe by ID:', error)
+		throw new Error('Error interno al obtener la receta por ID.')
 	}
-	return null
 }
 
-async function createRecipe(recipe: CreateRecipeBody): Promise<CreateRecipeResult> {
+async function createRecipe(newRecipe: NewRecipeDB): Promise<CreateRecipeResult> {
 	try {
-		const query = `
-        INSERT INTO recipes (
-          RECIPE_NAME, AUTHOR, URL, CAMERA_SENSOR, FILM, GRAIN, 
-          COLOR_CHROME_EFFECT, COLOR_CHROME_FX_BLUE, WHITE_BALANCE, 
-          DYNAMIC_RANGE, HIGHLIGHT, SHADOW, COLOR, SHARPNESS, NR, 
-          CLARITY, EXP_COMPENSATION, ISO, NOTES
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `
+		const result = await turso
+			.insert(recipes)
+			.values(newRecipe)
+			.returning({ lastInsertRowid: recipes.id })
 
-		const values = [
-			recipe.recipeName,
-			recipe.author,
-			recipe.url,
-			recipe.cameraSensor,
-			recipe.film,
-			recipe.grain,
-			recipe.colorChromeEffect,
-			recipe.colorChromeFxBlue,
-			recipe.whiteBalance,
-			recipe.dynamicRange,
-			recipe.highlight,
-			recipe.shadow,
-			recipe.color,
-			recipe.sharpness,
-			recipe.nr,
-			recipe.clarity,
-			recipe.expCompensation,
-			recipe.iso,
-			recipe.notes
-		]
-
-		const result = await turso.execute({ sql: query, args: values })
-
+		console.log('Insert result:', result)
 		return {
 			success: true,
-			lastInsertRowid: result.lastInsertRowid?.toString()
+			lastInsertRowid: result[0].lastInsertRowid?.toString()
 		}
 	} catch (error) {
 		console.error('Error al insertar en Turso:', error)
@@ -172,7 +88,7 @@ async function updateRecipe(id: number, updateData: UpdateRecipeBody): Promise<U
 
 async function deleteRecipe(id: number): Promise<UpdateRecipeResult> {
 	try {
-		await turso.execute('DELETE FROM RECIPES WHERE id = ?', [id])
+		await turso.delete(recipes).where(eq(recipes.id, id))
 		return {
 			success: true,
 			rowsAffected: 1

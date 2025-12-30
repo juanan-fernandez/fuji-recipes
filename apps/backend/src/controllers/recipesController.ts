@@ -32,7 +32,6 @@ async function getRecipeById(req: Request<RecipeParams>, res: Response): Promise
 async function createRecipe(req: Request<CreateRecipeBody>, res: Response): Promise<void> {
 	try {
 		const body: CreateRecipeBody = req.body
-		console.log(body)
 		const result = await recipeSrv.createRecipe(body)
 
 		res.status(201).json({

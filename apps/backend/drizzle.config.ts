@@ -1,5 +1,8 @@
 import type { Config } from 'drizzle-kit'
 
+//load env variables
+process.loadEnvFile()
+
 export default {
 	schema: './src/db/schema',
 	out: './drizzle',
