@@ -1,23 +1,21 @@
 import { Request, Response } from 'express'
-import { Recipe } from '@fujirecipes/shared/dist/types/recipeTypes'
+//import { Recipe } from '@fujirecipes/shared/dist/types/recipeTypes'
+import { RecipeDB, NewRecipeDB, UpdateRecipeDB } from '@backend/database'
 import * as recipeSrv from '../services/recipesService'
 
 interface RecipeParams {
 	id: number
 }
 
-type CreateRecipeBody = Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>
-type UpdateRecipeBody = Partial<CreateRecipeBody>
-
 async function getAllRecipes(req: Request, res: Response): Promise<void> {
-	const recipes: Recipe[] = await recipeSrv.getAllRecipes()
+	const recipes: RecipeDB[] = await recipeSrv.getAllRecipes()
 	res.json({ message: 'List of all recipes', data: recipes })
 }
 
 async function getRecipeById(req: Request<RecipeParams>, res: Response): Promise<void> {
 	try {
 		const { id } = req.params
-		const recipe: Recipe | null = await recipeSrv.getRecipeById(id)
+		const recipe: RecipeDB | null = await recipeSrv.getRecipeById(id)
 		if (!recipe) {
 			res.status(404).json({ message: `Recipe con ID: ${id} no encontrada` })
 			return
@@ -29,9 +27,9 @@ async function getRecipeById(req: Request<RecipeParams>, res: Response): Promise
 	}
 }
 
-async function createRecipe(req: Request<CreateRecipeBody>, res: Response): Promise<void> {
+async function createRecipe(req: Request<NewRecipeDB>, res: Response): Promise<void> {
 	try {
-		const body: CreateRecipeBody = req.body
+		const body: NewRecipeDB = req.body
 		const result = await recipeSrv.createRecipe(body)
 
 		res.status(201).json({
@@ -44,12 +42,12 @@ async function createRecipe(req: Request<CreateRecipeBody>, res: Response): Prom
 }
 
 async function updateRecipe(
-	req: Request<RecipeParams, UpdateRecipeBody>,
+	req: Request<RecipeParams, UpdateRecipeDB>,
 	res: Response
 ): Promise<void> {
 	try {
 		const { id } = req.params
-		const data: UpdateRecipeBody = req.body
+		const data: UpdateRecipeDB = req.body
 		const result = await recipeSrv.updateRecipe(id, data)
 		if (!result || result.rowsAffected === 0) {
 			res.status(404).json({

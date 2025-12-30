@@ -1,12 +1,8 @@
 import { turso } from '@db/dbclient'
 import { recipes } from '@db/schema'
 import { eq } from 'drizzle-orm'
-//import { RecipeDB, mapRowToRecipe } from '@db/mappers/recipeMapper'
-import { RecipeDB, NewRecipeDB } from '@db/types'
-import { Recipe } from '@fujirecipes/shared/dist/types/recipeTypes'
+import { RecipeDB, NewRecipeDB, UpdateRecipeDB } from '@db/types'
 
-type CreateRecipeBody = Omit<Recipe, 'id'>
-type UpdateRecipeBody = Partial<CreateRecipeBody>
 type CreateRecipeResult = {
 	success: boolean
 	lastInsertRowid?: string
@@ -58,23 +54,12 @@ async function createRecipe(newRecipe: NewRecipeDB): Promise<CreateRecipeResult>
 	}
 }
 
-async function updateRecipe(id: number, updateData: UpdateRecipeBody): Promise<UpdateRecipeResult> {
+async function updateRecipe(id: number, updateData: UpdateRecipeDB): Promise<UpdateRecipeResult> {
 	try {
-		// 1. Construimos la consulta dinámicamente según los campos presentes
-		const fields = Object.keys(updateData)
-		if (fields.length === 0) return { success: false }
-
-		// Mapeamos las claves de JS a las columnas de la DB (Uppercase)
-		const setClause = fields
-			.map((key) => `${key.replace(/([A-Z])/g, '_$1').toUpperCase()} = ?`)
-			.join(', ')
-
-		const query = `UPDATE recipes SET ${setClause} WHERE id = ?`
-
-		// 2. Preparamos los valores (añadiendo el ID al final para el WHERE)
-		const values = [...Object.values(updateData), id]
-
-		const result = await turso.execute({ sql: query, args: values })
+		const result = await turso
+			.update(recipes)
+			.set({ ...updateData })
+			.where(eq(recipes.id, id))
 
 		return {
 			success: true,
