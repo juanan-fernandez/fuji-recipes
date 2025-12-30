@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+
+# Carpetas de salida de compilación
+dist/
+build/
+out/
+
+# Archivos de configuración de entorno
+.env
+.env.*
+
+# Otros
+package-lock.json
+yarn.lock
+.next/
+.cache/
