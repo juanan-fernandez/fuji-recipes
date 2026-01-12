@@ -1,5 +1,6 @@
-// db/schema/recipes.ts
+// database/schema/recipes.ts
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
+import { sql } from 'drizzle-orm'
 
 export const recipes = sqliteTable('RECIPES', {
 	id: integer('Id').primaryKey({ autoIncrement: true }),
@@ -22,6 +23,11 @@ export const recipes = sqliteTable('RECIPES', {
 	expCompensation: text('EXP_COMPENSATION'),
 	iso: text('ISO').default('Auto'),
 	notes: text('NOTES'),
-	createdAt: text('created_at').notNull(),
-	updatedAt: text('updated_at').notNull()
+	createdAt: text('created_at')
+		.notNull()
+		.default(sql`CURRENT_TIMESTAMP`),
+
+	updatedAt: text('updated_at')
+		.notNull()
+		.default(sql`CURRENT_TIMESTAMP`)
 })

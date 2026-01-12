@@ -4,7 +4,7 @@ import type { Config } from 'drizzle-kit'
 process.loadEnvFile()
 
 export default {
-	schema: './src/db/schema',
+	schema: './src/database/schema',
 	out: './drizzle',
 	dialect: 'turso',
 	dbCredentials: {
