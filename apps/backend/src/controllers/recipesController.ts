@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { AuthenticatedRequest } from '../types/express'
 //import { Recipe } from '@fujirecipes/shared/dist/types/recipeTypes'
 import { RecipeDB, NewRecipeDB, UpdateRecipeDB } from '@backend/database'
 import * as recipeSrv from '../services/recipesService'
@@ -27,7 +28,7 @@ async function getRecipeById(req: Request<RecipeParams>, res: Response): Promise
 	}
 }
 
-async function createRecipe(req: Request<NewRecipeDB>, res: Response): Promise<void> {
+async function createRecipe(req: AuthenticatedRequest<NewRecipeDB>, res: Response): Promise<void> {
 	try {
 		const body: NewRecipeDB = req.body
 		const result = await recipeSrv.createRecipe(body)
@@ -42,11 +43,15 @@ async function createRecipe(req: Request<NewRecipeDB>, res: Response): Promise<v
 }
 
 async function updateRecipe(
-	req: Request<RecipeParams, UpdateRecipeDB>,
+	req: AuthenticatedRequest<RecipeParams, UpdateRecipeDB>,
 	res: Response
 ): Promise<void> {
 	try {
 		const { id } = req.params
+		if (!id) {
+			res.status(400).json({ message: 'El valor ID de Recipe es requerido para actualizar' })
+			return
+		}
 		const data: UpdateRecipeDB = req.body
 		const result = await recipeSrv.updateRecipe(id, data)
 		if (!result || result.rowsAffected === 0) {
@@ -62,9 +67,13 @@ async function updateRecipe(
 	}
 }
 
-async function deleteRecipe(req: Request<RecipeParams>, res: Response): Promise<void> {
+async function deleteRecipe(req: AuthenticatedRequest<RecipeParams>, res: Response): Promise<void> {
 	try {
 		const { id } = req.params
+		if (!id) {
+			res.status(400).json({ message: 'El valor ID de Recipe es requerido para eliminar' })
+			return
+		}
 		const result = await recipeSrv.deleteRecipe(id)
 		if (!result || result.rowsAffected === 0) {
 			res.status(404).json({ message: `Recipe con ID: ${id} no encontrada` })

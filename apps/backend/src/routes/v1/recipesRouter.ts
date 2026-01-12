@@ -5,7 +5,9 @@ import {
 	createRecipe,
 	updateRecipe,
 	deleteRecipe
-} from '../../controllers/recipesController'
+} from '@controllers/recipesController'
+
+import { authMiddleware } from '@middleware/authMiddleware'
 
 const router = express.Router()
 
@@ -15,10 +17,10 @@ router.get('/', getAllRecipes)
 //get recipe by id
 router.get('/:id', getRecipeById)
 
-router.post('/', createRecipe)
+router.post('/', authMiddleware, createRecipe)
 
-router.put('/:id', updateRecipe)
+router.put('/:id', authMiddleware, updateRecipe)
 
-router.delete('/:id', deleteRecipe)
+router.delete('/:id', authMiddleware, deleteRecipe)
 
 export default router

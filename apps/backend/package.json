@@ -18,13 +18,17 @@
 	"type": "commonjs",
 	"dependencies": {
 		"@libsql/client": "^0.15.15",
+		"@shared/types": "workspace:*",
+		"bcrypt": "^6.0.0",
 		"drizzle-orm": "^0.45.1",
 		"express": "^5.2.1",
-		"@shared/types": "workspace:*"
+		"jsonwebtoken": "^9.0.3"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
+		"@types/bcrypt": "^6.0.0",
 		"@types/express": "^5.0.6",
+		"@types/jsonwebtoken": "^9.0.10",
 		"@types/node": "^25.0.3",
 		"@typescript-eslint/eslint-plugin": "^8.50.1",
 		"@typescript-eslint/parser": "^8.50.1",
