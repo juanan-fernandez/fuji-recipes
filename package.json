@@ -1,10 +1,6 @@
 {
 	"name": "fuji-recipes",
 	"private": true,
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	],
 	"scripts": {
 		"dev": "npm run dev --workspace apps/backend & npm run dev --workspace apps/frontend",
 		"build": "npm run build --workspaces",
