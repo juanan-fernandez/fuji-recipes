@@ -6,14 +6,14 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"baseUrl": ".",
-		"paths": {
-			"@backend/*": ["apps/backend/src/*"],
-			"@db/*": ["apps/backend/src/database/*"],
-			"@shared/*": ["apps/packages/shared/*"],
-			"@utils/*": ["apps/backend/src/utils/*"],
-			"@services/*": ["apps/backend/src/services/*"],
-			"@controllers/*": ["apps/backend/src/controllers/*"],
-			"@middleware/*": ["apps/backend/src/middleware/*"]
-		}
+			"paths": {
+				"@backend/*": ["apps/backend/src/*"],
+				"@db/*": ["apps/backend/src/database/*"],
+				"@shared/*": ["packages/shared/*"],
+				"@utils/*": ["apps/backend/src/utils/*"],
+				"@services/*": ["apps/backend/src/services/*"],
+				"@controllers/*": ["apps/backend/src/controllers/*"],
+				"@middleware/*": ["apps/backend/src/middleware/*"]
+			}
 	}
 }

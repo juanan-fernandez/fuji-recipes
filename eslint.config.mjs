@@ -1,10 +1,7 @@
-import { FlatCompat } from '@eslint/eslintrc'
 import path from 'path'
 import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import prettier from 'eslint-plugin-prettier'
-
-const compat = new FlatCompat({ baseDirectory: process.cwd() })
 
 export default [
 	// Ignore patterns
@@ -43,17 +40,17 @@ export default [
 	/**
 	 * Frontend React / Astro + TS
 	 */
-	{
-		files: ['apps/frontend/**/*.ts', 'apps/frontend/**/*.tsx'],
-		languageOptions: {
-			parser: typescriptParser,
-			parserOptions: {
-				tsconfigRootDir: path.resolve('./apps/frontend'),
-				project: './tsconfig.json',
-				ecmaVersion: 2022,
-				sourceType: 'module'
-			}
-		},
+		{
+			files: ['apps/frontend/**/*.ts', 'apps/frontend/**/*.tsx'],
+			languageOptions: {
+				parser: typescriptParser,
+				parserOptions: {
+					tsconfigRootDir: path.resolve('./apps/frontend'),
+					project: ['./tsconfig.app.json', './tsconfig.node.json'],
+					ecmaVersion: 2022,
+					sourceType: 'module'
+				}
+			},
 		plugins: {
 			'@typescript-eslint': typescriptEslint,
 			prettier: prettier
