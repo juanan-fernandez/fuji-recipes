@@ -11,6 +11,10 @@ type LoginFormProps = {
 
 const API_BASE = '/api/v1'
 
+function getLoginErrorMessage(error?: string) {
+	return error ?? 'No se pudo iniciar sesión.'
+}
+
 function LoginForm({ onLoginSuccess }: LoginFormProps) {
 	const [login, setLogin] = useState<LoginState>({ username: '', password: '' })
 	const [loginMessage, setLoginMessage] = useState('')
@@ -28,16 +32,30 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
 				body: JSON.stringify(login)
 			})
 
-			const payload = (await response.json()) as { token?: string; error?: string }
+			let payload: { token?: string; error?: string } = {}
+			const contentType = response.headers.get('content-type') ?? ''
+			if (contentType.includes('application/json')) {
+				payload = (await response.json()) as { token?: string; error?: string }
+			}
+
 			if (!response.ok || !payload.token) {
-				setLoginMessage(payload.error ?? 'No se pudo iniciar sesión.')
+				if (response.status >= 500) {
+					setLoginMessage(
+						'No se pudo conectar correctamente con el backend. Revisa que el servidor API esté activo en el puerto 3080.'
+					)
+					return
+				}
+
+				setLoginMessage(getLoginErrorMessage(payload.error))
 				return
 			}
 
 			onLoginSuccess(payload.token)
 			setLoginMessage('Sesión iniciada correctamente.')
 		} catch {
-			setLoginMessage('Error de red al iniciar sesión.')
+			setLoginMessage(
+				'Error de conexión al iniciar sesión. Comprueba que el frontend pueda acceder al backend en el puerto 3080.'
+			)
 		} finally {
 			setIsLoggingIn(false)
 		}

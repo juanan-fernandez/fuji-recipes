@@ -12,7 +12,7 @@ app.use(express.json())
 // rutas
 app.use('/api/v1/recipes', recipesRouter)
 app.use('/api/v1/users', usersRouter) // Reutilizando recipesRouter para users por ahora
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3080
 
 app.listen(PORT, () => {
 	console.log(`🚀 Backend running on port ${PORT}`)
