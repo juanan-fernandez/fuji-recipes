@@ -63,7 +63,6 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
 
 	return (
 		<>
-			<h2>1) Acceso</h2>
 			<form onSubmit={handleLogin} className="form-grid">
 				<label>
 					Username
