@@ -15,6 +15,7 @@ import {
 } from '@/features/recipes/recipes.constants'
 import { parseSignedInt, validateForm } from '@/features/recipes/recipes.validators'
 import type { RecipeFormState } from '@/features/recipes/recipes.types'
+import './RecipeForm.css'
 
 type RecipeFormProps = {
 	token: string

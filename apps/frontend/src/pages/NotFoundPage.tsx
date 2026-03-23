@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import './NotFoundPage.css'
 
 export default function NotFoundPage() {
 	return (
@@ -9,7 +10,7 @@ export default function NotFoundPage() {
 				La ruta que has abierto no existe o ya no esta disponible. Puedes volver al inicio para
 				seguir navegando por el catalogo de recetas.
 			</p>
-			<Link to="/" className="primary not-found-link">
+			<Link to="/" className="primary">
 				Volver al inicio
 			</Link>
 		</section>

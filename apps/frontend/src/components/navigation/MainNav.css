@@ -1,0 +1,64 @@
+.main-nav {
+	max-width: 1100px;
+	margin: 0 auto 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem 1.2rem;
+	border: 1px solid var(--line);
+	border-radius: 20px;
+	background: var(--surface);
+	backdrop-filter: blur(8px);
+	box-shadow: 0 16px 35px var(--shadow);
+}
+
+.nav-brand,
+.nav-link,
+.nav-button {
+	font: inherit;
+	color: var(--text);
+	text-decoration: none;
+}
+
+.nav-brand {
+	font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+	font-size: 1.2rem;
+	font-weight: 700;
+}
+
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	flex-wrap: wrap;
+}
+
+.nav-link,
+.nav-button {
+	padding: 0.6rem 0.95rem;
+	border-radius: var(--radius-pill);
+	border: 1px solid transparent;
+}
+
+.nav-link:hover,
+.nav-button:hover {
+	border-color: var(--line);
+	background: #fffcf5;
+}
+
+.nav-link-accent,
+.nav-button {
+	border-color: #cfe5d9;
+}
+
+.nav-button {
+	background: transparent;
+	cursor: pointer;
+}
+
+@media (max-width: 920px) {
+	.main-nav {
+		flex-direction: column;
+	}
+}

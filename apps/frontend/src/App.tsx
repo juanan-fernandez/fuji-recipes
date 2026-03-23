@@ -5,7 +5,6 @@ import CreateRecipePage from '@/pages/CreateRecipePage'
 import HomePage from '@/pages/HomePage'
 import LoginPage from '@/pages/LoginPage'
 import NotFoundPage from '@/pages/NotFoundPage'
-import './App.css'
 
 function App() {
 	return (

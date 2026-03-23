@@ -1,0 +1,59 @@
+* {
+	box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+	margin: 0;
+	min-height: 100%;
+}
+
+body {
+	font-family: 'Avenir Next', 'Gill Sans', 'Segoe UI', sans-serif;
+	color: var(--text);
+	background: var(--bg);
+}
+
+h1 {
+	margin: 0.55rem 0;
+	max-width: 14ch;
+	font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+	font-size: clamp(2rem, 6vw, 3.3rem);
+	line-height: 0.98;
+}
+
+h2,
+h3 {
+	margin: 0;
+}
+
+label {
+	display: grid;
+	gap: 0.28rem;
+	color: #4f4742;
+	font-size: 0.9rem;
+}
+
+input,
+select,
+textarea {
+	width: 100%;
+	border: 1px solid #d9cab2;
+	border-radius: 9px;
+	padding: 0.55rem 0.65rem;
+	background: #fff;
+	color: #1f1a17;
+	font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 2px solid #9ed2bb;
+	border-color: #8abca5;
+}
+
+a {
+	color: inherit;
+}

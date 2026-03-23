@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
+import './MainNav.css'
 
 export default function MainNav() {
 	const { isAuthenticated, logout } = useAuth()
